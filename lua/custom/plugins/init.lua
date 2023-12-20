@@ -13,7 +13,8 @@ return {
     'tikhomirov/vim-glsl',
     'sbdchd/neoformat',
     'tpope/vim-surround',
-    { 'mfussenegger/nvim-dap', config = function ()
+    {
+        'mfussenegger/nvim-dap', config = function ()
             local dap = require('dap')
             dap.configurations.python = {
                 {
@@ -38,28 +39,87 @@ return {
                 },
             }
 
-        dap.adapters.python = {
-            type = 'executable';
-            command = os.getenv('HOME') .. '/.virtualenvs/tools/bin/python';
-            args = { '-m', 'debugpy.adapter' };
-        }
+            dap.adapters.python = {
+                type = 'executable';
+                command = os.getenv('HOME') .. '/.virtualenvs/tools/bin/python';
+                args = { '-m', 'debugpy.adapter' };
+            }
 
-        dap.adapters.cpp = {
-            type = 'executable';
-            command = 'gdb';
-            args = {  };
-        }
+            dap.adapters.cpp = {
+                type = 'executable';
+                command = 'gdb';
+                args = {  };
+            }
 
         end
     },
     -- { 'uZer/pywal16.nvim', opts = {} },
-    { 'ThePrimeagen/harpoon', opts = {} ,keys = {
-        { '<c-1>', "<cmd>lua require('harpoon.ui').nav_file(1)<cr>" },
-        { '<c-2>', "<cmd>lua require('harpoon.ui').nav_file(2)<cr>"},
-        { '<c-3>', "<cmd>lua require('harpoon.ui').nav_file(3)<cr>"},
-        { '<c-4>', "<cmd>lua require('harpoon.ui').nav_file(4)<cr>"},
-        { '<leader>hh', "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>", desc = "Toggle Harpoon Menu"},
-        { '<leader>ha', "<cmd>lua require('harpoon.mark').add_file()<cr>", desc = "Add File to Harpoon"},
-    }
+    {
+        'ThePrimeagen/harpoon', opts = {} ,keys = {
+            { '<c-1>', "<cmd>lua require('harpoon.ui').nav_file(1)<cr>" },
+            { '<c-2>', "<cmd>lua require('harpoon.ui').nav_file(2)<cr>"},
+            { '<c-3>', "<cmd>lua require('harpoon.ui').nav_file(3)<cr>"},
+            { '<c-4>', "<cmd>lua require('harpoon.ui').nav_file(4)<cr>"},
+            { '<leader>hh', "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>", desc = "Toggle Harpoon Menu"},
+            { '<leader>ha', "<cmd>lua require('harpoon.mark').add_file()<cr>", desc = "Add File to Harpoon"},
+        },
+    },
+
+    {
+        'nvim-orgmode/orgmode',
+        dependencies = {
+            { 'nvim-treesitter/nvim-treesitter', lazy = true },
+        },
+        config = function()
+            -- Load treesitter grammar for org
+            require('orgmode').setup_ts_grammar()
+
+            -- Setup treesitter
+            require('nvim-treesitter.configs').setup({
+                highlight = {
+                    enable = true,
+                    additional_vim_regex_highlighting = { 'org' },
+                },
+                ensure_installed = { 'org' },
+            })
+
+            -- Setup orgmode
+            require('orgmode').setup({
+                org_agenda_files = '~/syncthing/documents/org/journal',
+                org_default_notes_file = '~/syncthing/documents/org/inbox.org',
+            })
+        end,
+    },
+    {
+        "nomnivore/ollama.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+        },
+
+        -- All the user commands added by the plugin
+        cmd = { "Ollama", "OllamaModel", "OllamaServe", "OllamaServeStop" },
+
+        keys = {
+            -- Sample keybind for prompt menu. Note that the <c-u> is important for selections to work properly.
+            {
+                "<leader>oo",
+                ":<c-u>lua require('ollama').prompt()<cr>",
+                desc = "ollama prompt",
+                mode = { "n", "v" },
+            },
+
+            -- Sample keybind for direct prompting. Note that the <c-u> is important for selections to work properly.
+            {
+                "<leader>oG",
+                ":<c-u>lua require('ollama').prompt('Generate_Code')<cr>",
+                desc = "ollama Generate Code",
+                mode = { "n", "v" },
+            },
+        },
+
+        ---@type Ollama.Config
+        opts = {
+            -- your configuration overrides
+        }
     }
 }
