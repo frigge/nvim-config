@@ -70,17 +70,17 @@ return {
                 },
             }
 
-        dap.adapters.python = {
-            type = 'executable';
-            command = os.getenv('HOME') .. '/.virtualenvs/tools/bin/python';
-            args = { '-m', 'debugpy.adapter' };
-        }
+            dap.adapters.python = {
+                type = 'executable';
+                command = os.getenv('HOME') .. '/.virtualenvs/tools/bin/python';
+                args = { '-m', 'debugpy.adapter' };
+            }
 
-        dap.adapters.cpp = {
-            type = 'executable';
-            command = 'gdb';
-            args = {  };
-        }
+            dap.adapters.cpp = {
+                type = 'executable';
+                command = 'gdb';
+                args = {  };
+            }
 
         end
     },
@@ -118,5 +118,37 @@ return {
                 org_default_notes_file = '~/orgfiles/refile.org',
             })
         end,
+    },
+    {
+        "nomnivore/ollama.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+        },
+
+        -- All the user commands added by the plugin
+        cmd = { "Ollama", "OllamaModel", "OllamaServe", "OllamaServeStop" },
+
+        keys = {
+            -- Sample keybind for prompt menu. Note that the <c-u> is important for selections to work properly.
+            {
+                "<leader>oo",
+                ":<c-u>lua require('ollama').prompt()<cr>",
+                desc = "ollama prompt",
+                mode = { "n", "v" },
+            },
+
+            -- Sample keybind for direct prompting. Note that the <c-u> is important for selections to work properly.
+            {
+                "<leader>oG",
+                ":<c-u>lua require('ollama').prompt('Generate_Code')<cr>",
+                desc = "ollama Generate Code",
+                mode = { "n", "v" },
+            },
+        },
+
+        ---@type Ollama.Config
+        opts = {
+            -- your configuration overrides
+        }
     }
 }
