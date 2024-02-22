@@ -182,6 +182,13 @@ require('lazy').setup({
     },
   },
 
+  -- {
+  --   'uZer/pywal16.nvim',
+  --   config = function()
+  --     vim.cmd.colorscheme 'pywal16'
+  --   end,
+  -- },
+
   {
     -- Theme inspired by Atom
     'navarasu/onedark.nvim',
@@ -198,6 +205,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
+        -- theme = 'pywal16-nvim',
         theme = 'onedark',
         component_separators = '|',
         section_separators = '',
@@ -317,6 +325,7 @@ vim.b["neoformat_basic_format_retab"] = 0
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+vim.keymap.set({ 'n' }, '<leader>vv', ':grep -r <cword> .', { silent = true })
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
@@ -588,7 +597,7 @@ local servers = {
   clangd = {},
   -- gopls = {},
   pyright = {},
-  -- rust_analyzer = {},
+  rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
