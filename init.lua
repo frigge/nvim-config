@@ -430,8 +430,14 @@ vim.defer_fn(function()
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
 
-    highlight = { enable = true },
-    indent = { enable = true },
+    highlight = { 
+      enable = true,
+      disable = { "cpp", "c" },
+    },
+    indent = { 
+      enable = true,
+      disable = { "cpp", "c" },
+    },
     incremental_selection = {
       enable = true,
       keymaps = {
