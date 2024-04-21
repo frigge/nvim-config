@@ -17,6 +17,22 @@ vim.keymap.set('v', '<leader>tu', '<cmd>\'<,\'>s/\t/    /<cr>')
 vim.keymap.set('n', '<leader>tt', '<cmd>s/    /\t/<cr>')
 vim.keymap.set('v', '<leader>tt', '<cmd>\'<,\'>s/    /\t/<cr>')
 
+vim.keymap.set('n', '<C-J>', '<cmd>cnext<cr>zz')
+vim.keymap.set('n', '<C-K>', '<cmd>cprev<cr>zz')
+vim.keymap.set('n', '<C-U>', '<C-U>zz')
+vim.keymap.set('n', '<C-D>', '<C-D>zz')
+vim.keymap.set('n', '<C-F>', '<C-F>zz')
+vim.keymap.set('n', '<C-B>', '<C-B>zz')
+vim.keymap.set('n', 'n', 'nzz')
+vim.keymap.set('n', 'N', 'Nzz')
+
+local grep_file_under_cursor = function ()
+    local folder = vim.fn.getcwd()
+    vim.cmd('grep -r <cword> ' .. folder)
+    vim.cmd('copen')
+end
+vim.keymap.set('n', '<leader>vv', grep_file_under_cursor)
+
 vim.keymap.set('n', '<f2>', '<cmd>Git<cr>')
 -- vim.g.AirLatexCookieDB = "~/.mozilla/firefox/vs4jaabt.default-release-1685526525795/cookies.sqlite";
 vim.g.AirLatexCookie = "cookies:overleaf_session2=s%3ABWdAGDm0ED_zujiI5irIvO3cM8n_q9Vt.I5MCdT1MLIWQ0VphgCrFErF1MKDGTR846FWIhX71y1k;maybe_morecookies=1";
@@ -28,7 +44,7 @@ vim.g.vimtex_view_general_viewer = "zathura"
 
 return {
     'tikhomirov/vim-glsl',
-    'sbdchd/neoformat',
+    -- 'sbdchd/neoformat',
     'tpope/vim-surround',
     'lervag/vimtex',
     -- 'da-h/AirLatex.vim',
