@@ -21,7 +21,7 @@ vim.keymap.set('n', '<f2>', '<cmd>Git<cr>')
 -- vim.g.AirLatexCookieDB = "~/.mozilla/firefox/vs4jaabt.default-release-1685526525795/cookies.sqlite";
 vim.g.AirLatexCookie = "cookies:overleaf_session2=s%3ABWdAGDm0ED_zujiI5irIvO3cM8n_q9Vt.I5MCdT1MLIWQ0VphgCrFErF1MKDGTR846FWIhX71y1k;maybe_morecookies=1";
 vim.g.vimtex_compiler_method = "latexmk"
-vim.g.vimtex_view_general_viewer = "termpdf"
+vim.g.vimtex_view_general_viewer = "zathura"
 -- vim.g.AirLatexUsername = "cookies:overleaf_session2=s%3ABWdAGDm0ED_zujiI5irIvO3cM8n_q9Vt.I5MCdT1MLIWQ0VphgCrFErF1MKDGTR846FWIhX71y1k";
 -- vim.g.AirLatexUseHTTPS = 1;
 -- vim.g.AirLatexAllowInsecure = 0;
@@ -120,35 +120,28 @@ return {
         end,
     },
     {
-        "nomnivore/ollama.nvim",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-        },
-
-        -- All the user commands added by the plugin
-        cmd = { "Ollama", "OllamaModel", "OllamaServe", "OllamaServeStop" },
-
-        keys = {
-            -- Sample keybind for prompt menu. Note that the <c-u> is important for selections to work properly.
-            {
-                "<leader>oo",
-                ":<c-u>lua require('ollama').prompt()<cr>",
-                desc = "ollama prompt",
-                mode = { "n", "v" },
-            },
-
-            -- Sample keybind for direct prompting. Note that the <c-u> is important for selections to work properly.
-            {
-                "<leader>oG",
-                ":<c-u>lua require('ollama').prompt('Generate_Code')<cr>",
-                desc = "ollama Generate Code",
-                mode = { "n", "v" },
-            },
-        },
-
-        ---@type Ollama.Config
+        "David-Kunz/gen.nvim",
         opts = {
-            -- your configuration overrides
+            model = "mistral:instruct", -- The default model to use.
+            host = "localhost", -- The host running the Ollama service.
+            port = "11434", -- The port on which the Ollama service is listening.
+            display_mode = "float", -- The display mode. Can be "float" or "split".
+            show_prompt = false, -- Shows the Prompt submitted to Ollama.
+            show_model = false, -- Displays which model you are using at the beginning of your chat session.
+            quit_map = "q", -- set keymap for quit
+            retry_map = "<c-r>", -- set keymap for retry
+            no_auto_close = false, -- Never closes the window automatically.
+            init = function(options) pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
+            -- Function to initialize Ollama
+            command = function(options)
+                return "curl --silent --no-buffer -X POST http://" .. options.host .. ":" .. options.port .. "/api/chat -d $body"
+            end,
+            -- The command for the Ollama service. You can use placeholders $prompt, $model and $body (shellescaped).
+            -- This can also be a command string.
+            -- The executed command must return a JSON object with { response, context }
+            -- (context property is optional).
+            -- list_models = '<omitted lua function>', -- Retrieves a list of model names
+            debug = false -- Prints errors and the command which is run.
         }
-    }
+    },
 }
