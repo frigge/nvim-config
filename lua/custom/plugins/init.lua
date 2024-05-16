@@ -104,39 +104,50 @@ return {
     },
     -- { 'uZer/pywal16.nvim', opts = {} },
     { 'ThePrimeagen/harpoon', opts = {} ,keys = {
-        { '<leader>1', "<cmd>lua require('harpoon.ui').nav_file(1)<cr>" },
-        { '<leader>2', "<cmd>lua require('harpoon.ui').nav_file(2)<cr>"},
-        { '<leader>3', "<cmd>lua require('harpoon.ui').nav_file(3)<cr>"},
-        { '<leader>4', "<cmd>lua require('harpoon.ui').nav_file(4)<cr>"},
+        { '<leader>f', "<cmd>lua require('harpoon.ui').nav_file(1)<cr>" },
+        { '<leader>j', "<cmd>lua require('harpoon.ui').nav_file(2)<cr>"},
+        { '<leader>u', "<cmd>lua require('harpoon.ui').nav_file(3)<cr>"},
+        { '<leader>l', "<cmd>lua require('harpoon.ui').nav_file(4)<cr>"},
         { '<leader>hh', "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>", desc = "Toggle Harpoon Menu"},
         { '<leader>ha', "<cmd>lua require('harpoon.mark').add_file()<cr>", desc = "Add File to Harpoon"},
     }
     },
     {
         'nvim-orgmode/orgmode',
-        dependencies = {
-            { 'nvim-treesitter/nvim-treesitter', lazy = true },
-        },
         config = function()
-            -- Load treesitter grammar for org
-            require('orgmode').setup_ts_grammar()
-
-            -- Setup treesitter
-            require('nvim-treesitter.configs').setup({
-                highlight = {
-                    enable = true,
-                    additional_vim_regex_highlighting = { 'org' },
-                },
-                ensure_installed = { 'org' },
-            })
-
             -- Setup orgmode
             require('orgmode').setup({
-                org_agenda_files = '~/orgfiles/**/*',
-                org_default_notes_file = '~/orgfiles/refile.org',
+                org_agenda_files = { "~/syncthing-documents/org/journals/*", "~/syncthing-documents/org/pages/*" },
+                org_default_notes_file = '~/syncthing-documents/org/journals/%<%Y-%m-%d>.org',
             })
         end,
     },
+    {
+        "chipsenkbeil/org-roam.nvim",
+        dependencies = {
+            {
+                "nvim-orgmode/orgmode",
+                tag = "0.3.4",
+            },
+        },
+        config = function()
+            require("org-roam").setup({
+                directory = "/home/frigge/syncthing-documents/org/pages",
+                extensions = {
+                    dailies = {
+                        directory = "/home/frigge/syncthing-documents/org/journals",
+                        templates = {
+                            d = {
+                                description = "default",
+                                template = "%?",
+                                target = "%<%Y_%m_%d>.org",
+                            },
+                        },
+                    },
+                },
+            })
+        end
+    }
     {
         "David-Kunz/gen.nvim",
         opts = {
