@@ -576,7 +576,7 @@ require('which-key').register({
 }, { mode = 'v' })
 
 local lspconfig = require('lspconfig')
-lspconfig.glsl_analyzer.setup {}
+-- lspconfig.glsl_analyzer.setup {}
 
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.

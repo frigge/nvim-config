@@ -19,6 +19,8 @@ vim.keymap.set('v', '<leader>tt', '<cmd>\'<,\'>s/    /\t/<cr>')
 
 vim.keymap.set('n', '<C-J>', '<cmd>cnext<cr>zz')
 vim.keymap.set('n', '<C-K>', '<cmd>cprev<cr>zz')
+vim.keymap.set('n', '<C-H>', '<cmd>col<cr>zz')
+vim.keymap.set('n', '<C-L>', '<cmd>cnewer<cr>zz')
 vim.keymap.set('n', '<C-U>', '<C-U>zz')
 vim.keymap.set('n', '<C-D>', '<C-D>zz')
 vim.keymap.set('n', '<C-F>', '<C-F>zz')
