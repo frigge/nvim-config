@@ -40,6 +40,11 @@ vim.keymap.set('n', '<f2>', '<cmd>Git<cr>')
 vim.g.AirLatexCookie = "cookies:overleaf_session2=s%3ABWdAGDm0ED_zujiI5irIvO3cM8n_q9Vt.I5MCdT1MLIWQ0VphgCrFErF1MKDGTR846FWIhX71y1k;maybe_morecookies=1";
 vim.g.vimtex_compiler_method = "latexmk"
 vim.g.vimtex_view_general_viewer = "zathura"
+
+vim.opt.conceallevel = 2
+vim.opt.concealcursor = 'nc'
+vim.opt.scrolloff = 5
+
 -- vim.g.AirLatexUsername = "cookies:overleaf_session2=s%3ABWdAGDm0ED_zujiI5irIvO3cM8n_q9Vt.I5MCdT1MLIWQ0VphgCrFErF1MKDGTR846FWIhX71y1k";
 -- vim.g.AirLatexUseHTTPS = 1;
 -- vim.g.AirLatexAllowInsecure = 0;
