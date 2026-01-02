@@ -12,10 +12,10 @@ end
 vim.keymap.set('n', '<f4>', compile_current_shader_in_other_tmux_pane)
 
 -- juggle with mixed tabs and spaces
-vim.keymap.set('n', '<leader>tu', '<cmd>s/\t/    /<cr>')
-vim.keymap.set('v', '<leader>tu', '<cmd>\'<,\'>s/\t/    /<cr>')
-vim.keymap.set('n', '<leader>tt', '<cmd>s/    /\t/<cr>')
-vim.keymap.set('v', '<leader>tt', '<cmd>\'<,\'>s/    /\t/<cr>')
+vim.keymap.set('n', '<leader>tu', '<cmd>s/\t/    /<cr>', { desc = 'replace tabs by four spaces' })
+vim.keymap.set('v', '<leader>tu', '<cmd>\'<,\'>s/\t/    /<cr>', { desc = 'replace tabs in range by four spaces' })
+vim.keymap.set('n', '<leader>tt', '<cmd>s/    /\t/<cr>', { desc = 'replace four spaces by tab' })
+vim.keymap.set('v', '<leader>tt', '<cmd>\'<,\'>s/    /\t/<cr>', { desc = 'replace four space in range by tab' })
 
 vim.keymap.set('n', '<C-J>', '<cmd>cnext<cr>zz')
 vim.keymap.set('n', '<C-K>', '<cmd>cprev<cr>zz')
@@ -28,12 +28,12 @@ vim.keymap.set('n', '<C-B>', '<C-B>zz')
 vim.keymap.set('n', 'n', 'nzz')
 vim.keymap.set('n', 'N', 'Nzz')
 
-local grep_file_under_cursor = function ()
+local grep_word_under_cursor = function ()
     local folder = vim.fn.getcwd()
     vim.cmd('grep -r <cword> ' .. folder)
     vim.cmd('copen')
 end
-vim.keymap.set('n', '<leader>vv', grep_file_under_cursor)
+vim.keymap.set('n', '<leader>vv', grep_word_under_cursor, { desc = 'grep word under cursor' })
 
 vim.keymap.set('n', '<f2>', '<cmd>Git<cr>')
 -- vim.g.AirLatexCookieDB = "~/.mozilla/firefox/vs4jaabt.default-release-1685526525795/cookies.sqlite";
@@ -109,50 +109,48 @@ return {
     },
     -- { 'uZer/pywal16.nvim', opts = {} },
     { 'ThePrimeagen/harpoon', opts = {} ,keys = {
-        { '<leader>f', "<cmd>lua require('harpoon.ui').nav_file(1)<cr>" },
-        { '<leader>j', "<cmd>lua require('harpoon.ui').nav_file(2)<cr>"},
-        { '<leader>u', "<cmd>lua require('harpoon.ui').nav_file(3)<cr>"},
-        { '<leader>l', "<cmd>lua require('harpoon.ui').nav_file(4)<cr>"},
+        { '<leader>f', "<cmd>lua require('harpoon.ui').nav_prev()<cr>", desc = "Prev Harpooned File" },
+        { '<leader>j', "<cmd>lua require('harpoon.ui').nav_next()<cr>", desc = "Next Harpooned File" },
         { '<leader>hh', "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>", desc = "Toggle Harpoon Menu"},
         { '<leader>ha', "<cmd>lua require('harpoon.mark').add_file()<cr>", desc = "Add File to Harpoon"},
     }
     },
-    {
-        'nvim-orgmode/orgmode',
-        config = function()
-            -- Setup orgmode
-            require('orgmode').setup({
-                org_agenda_files = { "~/syncthing-documents/org/journals/*", "~/syncthing-documents/org/pages/*" },
-                org_default_notes_file = '~/syncthing-documents/org/journals/%<%Y-%m-%d>.org',
-            })
-        end,
-    },
-    {
-        "chipsenkbeil/org-roam.nvim",
-        dependencies = {
-            {
-                "nvim-orgmode/orgmode",
-                tag = "0.3.4",
-            },
-        },
-        config = function()
-            require("org-roam").setup({
-                directory = "/home/frigge/syncthing-documents/org/pages",
-                extensions = {
-                    dailies = {
-                        directory = "/home/frigge/syncthing-documents/org/journals",
-                        templates = {
-                            d = {
-                                description = "default",
-                                template = "%?",
-                                target = "%<%Y_%m_%d>.org",
-                            },
-                        },
-                    },
-                },
-            })
-        end
-    }
+    -- {
+    --     'nvim-orgmode/orgmode',
+    --     config = function()
+    --         -- Setup orgmode
+    --         require('orgmode').setup({
+    --             org_agenda_files = { "/mnt/piland/sascha/documents/org/files/journals/*", "/mnt/piland/sascha/documents/org/pages/*" },
+    --             org_default_notes_file = '/mnt/piland/sascha/documents/org/files/journals/%<%Y-%m-%d>.org',
+    --         })
+    --     end,
+    -- },
+    -- {
+    --     "chipsenkbeil/org-roam.nvim",
+    --     dependencies = {
+    --         {
+    --             "nvim-orgmode/orgmode",
+    --             tag = "0.3.4",
+    --         },
+    --     },
+    --     config = function()
+    --         require("org-roam").setup({
+    --             directory = "/mnt/piland/sascha/documents/org/files",
+    --             extensions = {
+    --                 dailies = {
+    --                     directory = "/mnt/piland/sascha/documents/org/files/journals",
+    --                     templates = {
+    --                         d = {
+    --                             description = "default",
+    --                             template = "%?",
+    --                             target = "%<%Y_%m_%d>.org",
+    --                         },
+    --                     },
+    --                 },
+    --             },
+    --         })
+    --     end
+    -- },
     {
         "David-Kunz/gen.nvim",
         opts = {
@@ -178,4 +176,31 @@ return {
             debug = false -- Prints errors and the command which is run.
         }
     },
+    {
+        "nvim-treesitter/nvim-treesitter-context",
+        config = function()
+            require('treesitter-context').setup({
+            enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+            multiwindow = false, -- Enable multiwindow support.
+            max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
+            min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+            line_numbers = true,
+            multiline_threshold = 20, -- Maximum number of lines to show for a single context
+            trim_scope = 'outer', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+            mode = 'cursor',  -- Line used to calculate context. Choices: 'cursor', 'topline'
+            -- Separator between context and content. Should be a single character string, like '-'.
+            -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+            separator = nil,
+            zindex = 20, -- The Z-index of the context window
+            on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+        })
+        end,
+    },
+    {
+        "gruvw/strudel.nvim",
+        build = "npm install",
+        config = function()
+            require("strudel").setup()
+        end,
+    }
 }
